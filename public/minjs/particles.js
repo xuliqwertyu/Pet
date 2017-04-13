@@ -1,0 +1,1 @@
+)(); function hexToRgb(hex){// By Tim Down - http://stackoverflow.com/a/5624139/3493650//Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF") var shorthandRegex =/^#?([a-f\d]) ([a-f\d]) ([a-f\d]) $/i};__ESCAPED_SOURCE_END_CLEAN_CSS__
