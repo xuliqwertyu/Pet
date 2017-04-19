@@ -1,92 +1,58 @@
-//引入gulp
-var gulp=require('gulp');
-//引入gulp-stylus插件
-var stylus=require('gulp-stylus')
-//创建一个编译stylus的任务
-gulp.task('stylus',function(){
-//获取要编译的文件
-//指定一个文件
-//gulp.src('./stylus/index.styl')
-//指定多个文件
-//gulp.src(['./stylus/index.styl','./stylus/css.styl'])
-//指定一个目录下所有(不包含子目录)
-//gulp.src('./stylus/*.styl')
-//指定一个目录及所有子目录下的文件
-return gulp.src('./stylus/**/*.styl')
-	//执行stylus编译
-	.pipe(stylus())
-	//输出编译后的文件
-	.pipe(gulp.dest('./public/css'))
-})
-//创建一个default任务
-gulp.task('logs',function(){
-console.log('this is log')
-})
-gulp.task('default',function(){
-console.log('this default')
+/**
+ * Created by Administrator on 2017/01/04.
+ */
+var gulp = require('gulp');
+var stylus = require('gulp-stylus');
+// var minifycss = require('gulp-minify-css');
+var uglify = require('gulp-uglify');
+var nodemon = require('gulp-nodemon');
+var browserSync = require('browser-sync').create();
+var reload = browserSync.reload;
+//编写一个编译stylus任务
+gulp.task('stylus',function () {
+    //stylus文件及其所有子目录的文件
+    return gulp.src('./stylus/**/*.styl')
+    //编译stylus文件
+        .pipe(stylus())
+        //输出stylus编译后的文件
+        .pipe(gulp.dest('./public/css/'))
 });
-gulp.task('es6',function(){
-console.log('this es6')
+gulp.task('minifycss',['stylus'],function () {
+    return gulp.src('./public/css/**/*.css')
+        .pipe(minifycss())
+        .pipe(gulp.dest('./public/mincss/'))
 });
-gulp.task('css',function(){
-console.log('this css')
+gulp.task('uglify',function () {
+    return gulp.src('./public/js/**/*.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('./public/minjs/'))
 });
-gulp.task('all',['logs','es6','css'],function(){
-console.log('this is all')
+/*不用每次都启动app.js，只需要启动watcher任务即可*/
+gulp.task('nodemon',function (nm) {
+    var flag = false;
+    return nodemon({
+        script:'./server.js'
+    }).on('start',function () {
+        if(!flag){
+            nm();
+            flag = true;
+        }
+    })
 });
-
-gulp.task('minijs',['es6'],function(){
-console.log('this is minijs')
-})	
-//先执行es6，后执行minijs
-//
-var minifycss=require('gulp-minify-css')
-
-gulp.task('minifycss',['stylus'],function(){
-return gulp.src('./public/css/**/*.css')
-		.pipe(minifycss())
-		.pipe(gulp.dest('./public/mincss'))
-})
-var uglify=require('gulp-uglify')
-gulp.task('uglify',function(){
-return gulp.src('./public/js/**/*.js')
-		.pipe(minifycss())
-		.pipe(gulp.dest('./public/minjs'))
-})
-
-gulp.task('watcher',['stylus', 'browserSync'],function(){
- gulp.watch('./public/js/**/*.js',['uglify']);
- gulp.watch('./stylus/**/*.styl',['stylus']);
- gulp.watch([
- 		'./public/css/**/*.css',
- 		'./public/minjs/**/*.js'
- ]).on('change',function(){
- 		reload();
- })
-})
-
-var nodemon=require('gulp-nodemon')
-gulp.task('nodemon',function(ab){
-var ft=false;
-return nodemon({
-script:'./server.js'
-}).on('start',function(){
-	if(!ft){
-		ab();
-		ft=true;
-	}
-})
-})
-var browserSync=require('browser-sync').create()
-var reload=browserSync.reload
-
-gulp.task('browserSync',['nodemon'],function(){
-	browserSync.init({
-	proxy:{
-		target:'http://127.0.0.1:9999'
-	},
-	files:['*'],
-	port:9888,
-	open:false
-	})
-})
+gulp.task('browserSync',['nodemon'],function () {
+    browserSync.init({
+        proxy:{
+            target:'http://127.0.0.1:16909'
+        },
+        files:['*'],
+        port:9888,
+        open:false
+    })
+});
+//动态监听
+gulp.task('watcher',['browserSync','stylus'],function () {
+    gulp.watch('./stylus/**/*.styl',['stylus']);
+    gulp.watch('./public/css/**/*.css').on('change',function () {
+        reload();
+    })
+});

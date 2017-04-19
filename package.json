@@ -1,28 +1,23 @@
 {
-  "name": "my-c",
-  "version": "0.0.1",
+  "name": "h5",
+  "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://code.aliyun.com/walkingin/CyyAPP.git"
-  },
-  "author": "xl",
+  "author": "yyf",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.14.0",
-    "sha1": "^1.1.1"
+    "express": "^4.14.0"
   },
   "devDependencies": {
-    "browser-sync": "^2.18.5",
+    "browser-sync": "^2.18.6",
     "gulp": "^3.9.1",
-    "gulp-browser-sync": "0.0.4",
-    "gulp-minify-css": "^1.2.4",
     "gulp-nodemon": "^2.2.1",
     "gulp-stylus": "^2.6.0",
-    "gulp-uglify": "^2.0.0"
+    "gulp-uglify": "^2.0.0",
+    "http-proxy-middleware": "^0.17.3"
   }
 }
