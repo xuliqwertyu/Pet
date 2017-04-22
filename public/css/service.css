@@ -142,3 +142,13 @@ li {
   overflow: hidden;
   margin-top: 40px;
 }
+.top {
+  height: 40px;
+  background: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  line-height: 40px;
+  text-align: center;
+}
